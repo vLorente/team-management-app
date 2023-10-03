@@ -7,4 +7,4 @@ class CRUDTeam(CRUDBase[Team, TeamCreate, TeamUpdate]):
     pass
 
 
-team = CRUDTeam(Team)
+crud_team = CRUDTeam(Team)

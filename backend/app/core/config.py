@@ -44,4 +44,5 @@ class Settings(BaseSettings):
     FIRST_SUPERUSER_PASSWORD: str
 
 
-settings = Settings(_env_file='.env', _env_file_encoding='utf-8')
+# settings = Settings(_env_file='.env', _env_file_encoding='utf-8')
+settings = Settings()
