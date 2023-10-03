@@ -12,7 +12,7 @@ UpdateSchemaType = TypeVar("UpdateSchemaType", bound=BaseModel)
 
 
 class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
-    def __init__(self, model: Type, session: AsyncSession):
+    def __init__(self, model: Type):
         self.model = model
 
     async def create(self,

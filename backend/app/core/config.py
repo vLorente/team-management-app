@@ -1,9 +1,12 @@
-from pathlib import Path
+# from pathlib import Path
 from typing import Any, List, Optional
 from pydantic import AnyHttpUrl, EmailStr, PostgresDsn, validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
-env_path = Path(__file__).parent.parent / ".env"
+# env_path = Path(__file__).parent / ".env"
+
+# print(env_path)
+# print(f'PATH FILE -> {Path(__file__)}')
 
 
 class Settings(BaseSettings):
@@ -12,7 +15,7 @@ class Settings(BaseSettings):
     # Project
     PROJECT_NAME: str
     PROJECT_VERSION: str
-    CORS_ORIGINS: List[AnyHttpUrl] = []
+    CORS_ORIGINS: List[AnyHttpUrl] = ['*']
 
     # PostgreSQL
     POSTGRES_USER: str
@@ -25,20 +28,10 @@ class Settings(BaseSettings):
 
     @validator("DATABASE_URI", pre=True)
     def assemble_db_connection(cls, v: Optional[str], values) -> Any:
-        print(f'VALUES -> {values}')
         if isinstance(v, str):
             return v
-        var = PostgresDsn.build(
-            scheme="postgresql",
-            username=values.get("POSTGRES_USER"),
-            password=values.get("POSTGRES_PASSWORD"),
-            host=values.get("POSTGRES_SERVER"),
-            port=values.get("POSTGRES_PORT"),
-            path=values.get("POSTGRES_DB") or ''
-        )
-        print(f'URI -> {var}')
         return PostgresDsn.build(
-            scheme="postgresql",
+            scheme="postgresql+asyncpg",
             username=values.get("POSTGRES_USER"),
             password=values.get("POSTGRES_PASSWORD"),
             host=values.get("POSTGRES_SERVER"),
@@ -51,4 +44,4 @@ class Settings(BaseSettings):
     FIRST_SUPERUSER_PASSWORD: str
 
 
-settings = Settings(_env_file=env_path, _env_file_encoding='utf-8')
+settings = Settings(_env_file='.env', _env_file_encoding='utf-8')

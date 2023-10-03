@@ -1,17 +1,8 @@
-# Comments are provided throughout this file to help you get started.
-# If you need more help, visit the Docker compose reference guide at
-# https://docs.docker.com/compose/compose-file/
-
-# Here the instructions define your application as a service called "app".
-# This service is built from the Dockerfile in the current directory.
-# You can add other services your application may depend on here, such as a
-# database or a cache. For examples, see the Awesome Compose repository:
-# https://github.com/docker/awesome-compose
 services:
   fastapi:
     build: ./backend
     container_name: fastapi-service
-    env_file: "./backend/.env"
+    env_file: ".env"
     environment:
       - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_SERVER}:${POSTGRES_PORT}/${POSTGRES_DB}
     ports:
@@ -23,7 +14,7 @@ services:
     image: postgres:15-alpine
     restart: always
     container_name: postgres_service
-    env_file: "./backend/.env"
+    env_file: ".env"
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     expose:
