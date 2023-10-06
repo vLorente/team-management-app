@@ -1,10 +1,10 @@
 # from typing import List
-from pydantic import BaseModel
+from pydantic import BaseModel, UUID4
 
 
 # Shared properties
 class TeamBase(BaseModel):
-    name: str = None
+    name: str
     location: str
 
 
@@ -20,7 +20,7 @@ class TeamUpdate(TeamBase):
 
 # Properties shared by models stored in DB
 class TeamInDBBase(TeamBase):
-    id: str
+    id: UUID4
     name: str
     location: str
 
