@@ -1,5 +1,4 @@
 from contextlib import asynccontextmanager
-from functools import wraps
 from sqlalchemy import MetaData
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.ext.declarative import declarative_base
@@ -10,9 +9,6 @@ from app.core.config import settings
 engine = create_async_engine(
     str(settings.DATABASE_URI),
 )
-
-async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False,
-                             autoflush=False)
 
 convention = {
     "ix": "ix_%(column_0_label)s",
@@ -26,14 +22,12 @@ metadata = MetaData(naming_convention=convention)
 Base = declarative_base(metadata=metadata)
 
 
-def get_session(function_):
-    @wraps(function_)
-    async def wrapper(*args, **kwargs):
-        async with async_session() as session:
-            value = await function_(session=session, *args, **kwargs)
-        return value
-
-    return wrapper
+async def get_session() -> AsyncSession:
+    async_session = sessionmaker(
+        engine, class_=AsyncSession, expire_on_commit=False
+    )
+    async with async_session() as session:
+        yield session
 
 
 @asynccontextmanager
