@@ -1,13 +1,12 @@
 from fastapi.testclient import TestClient
 from app.main import app  # Importa tu instancia de FastAPI
-from app.schemas.team import TeamCreate
 from app.db.setup import async_session
 from app.db.models.team import Team  # Importa tu modelo de datos
 
 client = TestClient(app)
 
 # Define datos de prueba
-test_team_data: TeamCreate = {
+test_team_data = {
     "name": "Test Team",
     "location": "Test Location"
 }

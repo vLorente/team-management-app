@@ -20,8 +20,8 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
                      payload: CreateSchemaType) -> ModelType:
         obj = self.model(**payload.model_dump())
         session.add(obj)
-        await self.session.commit()
-        await self.session.refresh(obj)
+        await session.commit()
+        await session.refresh(obj)
         return obj
 
     async def get(self, session: AsyncSession, id: Any) -> Optional[ModelType]:
