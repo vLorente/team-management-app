@@ -1,6 +1,6 @@
 from fastapi.testclient import TestClient
 from app.main import app  # Importa tu instancia de FastAPI
-from app.db.setup import async_session
+from app.db.setup import get_session
 from app.db.models.team import Team  # Importa tu modelo de datos
 
 client = TestClient(app)
@@ -21,7 +21,7 @@ def test_create_team():
     assert data["description"] == test_team_data["description"]
 
     # Limpia los datos de prueba
-    with async_session() as session:
+    with get_session() as session:
         team = session.query(Team).filter_by(id=data["id"]).first()
         session.delete(team)
 
@@ -35,7 +35,7 @@ def test_read_teams():
 
 def test_read_team():
     # Crea un equipo de prueba primero
-    with async_session() as session:
+    with get_session() as session:
         team = Team(**test_team_data)
         session.add(team)
         session.commit()
@@ -49,14 +49,14 @@ def test_read_team():
     assert data["description"] == test_team_data["description"]
 
     # Limpia los datos de prueba
-    with async_session() as session:
+    with get_session() as session:
         team = session.query(Team).filter_by(id=team.id).first()
         session.delete(team)
 
 
 def test_update_team():
     # Crea un equipo de prueba primero
-    with async_session() as session:
+    with get_session() as session:
         team = Team(**test_team_data)
         session.add(team)
         session.commit()
@@ -75,6 +75,6 @@ def test_update_team():
     assert data["description"] == update_data["description"]
 
     # Limpia los datos de prueba
-    with async_session() as session:
+    with get_session() as session:
         team = session.query(Team).filter_by(id=team.id).first()
         session.delete(team)
